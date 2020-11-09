@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"
+      integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw=="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="card">
+            <div class="card-container">
+              <h3 class="header">Emi Calculators</h3>
+              <div class="row">
+              <div class="col-sm-6">
+                <p class="loan">Loan Amount</p>
+                <div class="slidecontainer1">
+                  <input
+                    type="range"
+                    min="10000"
+                    max="1000000"
+                    value="10000"
+                    class="slider1"
+                    id="loanRange"
+                    onchange="myFunction1(value)"
+                  />
+                  <p>Rs. <span id="loan"></span></p>
+                </div>
+
+                <p class="Interest rate">Interest Rate</p>
+                <div class="slidecontainer2">
+                  <input
+                    type="range"
+                    min="1"
+                    max="30"
+                    value="1"
+                    class="slider2"
+                    id="rateRange"
+                    onchange="myFunction2(value)"
+                  />
+                  <p><span id="rate"></span>%</p>
+                </div>
+
+                <p class="Loan Tonur">Interest Rate</p>
+                <div class="slidecontainer3">
+                  <input
+                    type="range"
+                    min="1"
+                    max="20"
+                    value="1"
+                    class="slider3"
+                    id="yearrange"
+                    onchange="myFunction3(value)"
+                    s
+                  />
+                  <p><span id="year"></span>Y.</p>
+                </div>
+                
+              
+            </div>
+            <div class="col-sm-6">
+              <canvas id="doughnutChart"> </canvas>
+          </div>
+          </div>
+          
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+    </div>
+
+    <div class="container-fluid month">
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="card1">
+            <div class="card-container1">
+              <h3 class="header1">Date</h3>
+              <div class="row">
+                <div class="col-sm-6">
+                  <p class="Monthly Emi">Monthly Emi</p>
+                  <p class="Principal Amount">Principal Amount</p>
+                  <p class="Total Months">Total Year</p>
+                  <p class="Total Interest">Total Interest</p>
+                  <p class="Total Amount">Total Amount</p>
+                </div>
+                <div class="col-sm-6 text-right">
+                  <p class="Left">Monthly Emi</p>
+                  <p class="Left1" id="principalAmount">Rs. 10,000</p>
+                  <p class="Left2" id="totalMonth">1Year</p>
+                  <p class="Left3" id="totalInterest">1%</p>
+                  <p class="Left4">Total Amount</p>
+                </div>
+                <div class="col-sm-12 text-center">
+                  <button
+                    onclick="myFunction()"
+                    type="button"
+                    class="btn btn-primary btn-block generate"
+                  >
+                    Generate Loan Schedule
+                  </button>
+                  <p id="de"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+    </div>
+    <script>
+      function myFunction() {
+        document.getElementById("de").innerHTML = "";
+      }
+    </script>
+    <script>
+      function myFunction1(val) {
+        var pa = document.getElementById("principalAmount");
+        pa.innerHTML = val;
+
+        console.log("The input value has changed. The new value is: " + val);
+      }
+      var slider1 = document.getElementById("loanRange");
+      var output1 = document.getElementById("loan");
+      output1.innerHTML = slider1.value;
+
+      slider1.oninput = function () {
+        output1.innerHTML = this.value;
+      };
+    </script>
+
+    <script>
+      function myFunction2(val) {
+        var ti = document.getElementById("totalInterest");
+        ti.innerHTML = val;
+
+        console.log("The input value has changed. The new value is: " + val);
+      }
+      var slider2 = document.getElementById("rateRange");
+      var output2 = document.getElementById("rate");
+      output2.innerHTML = slider2.value;
+
+      slider2.oninput = function () {
+        output2.innerHTML = this.value;
+      };
+    </script>
+
+    <script>
+      function myFunction3(val) {
+        var tm = document.getElementById("totalMonth");
+        tm.innerHTML = val;
+
+        console.log("The input value has changed. The new value is: " + val);
+      }
+      var slider3 = document.getElementById("yearrange");
+      var output3 = document.getElementById("year");
+      output3.innerHTML = slider3.value;
+      console.log(slider3.value);
+
+      slider3.oninput = function () {
+        output3.innerHTML = this.value;
+      };
+    </script>
+
+    <script>
+      var ctxD = document.getElementById("doughnutChart").getContext("2d");
+      var myLineChart = new Chart(ctxD, {
+        type: "doughnut",
+        data: {
+          labels: ["Principal Amount", "Interest Rate"],
+          datasets: [
+            {
+              data: [80, 5],
+              backgroundColor: ["#001ad9", "#0095ff"],
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+        },
+      });
+    </script>
+  </body>
+</html>
