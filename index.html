@@ -29,13 +29,23 @@
               <div class="row">
               <div class="col-sm-6">
                 <p class="loan">Loan Amount</p>
+                <div>
+                  <input 
+                  type="number"
+                  min="10000"
+                  max="1000000"
+                  value="10000"
+                  id="loanRangeInput"
+                  onchange="getLoanRange(value)"
+                  />
+                </div>
                 <div class="slidecontainer1">
                   <input
                     type="range"
                     min="10000"
                     max="1000000"
                     value="10000"
-                    class="slider1"
+                    class="slider1 input"
                     id="loanRange"
                     onchange="myFunction1(value)"
                   />
@@ -43,6 +53,16 @@
                 </div>
 
                 <p class="Interest rate">Interest Rate</p>
+                <div>
+                  <input 
+                  type="number"
+                  min="1"
+                  max="30"
+                  value="1"
+                  id="InterestRateInput"
+                  onchange="getInterestRate(value)"
+                  />
+                </div>
                 <div class="slidecontainer2">
                   <input
                     type="range"
@@ -56,7 +76,17 @@
                   <p><span id="rate"></span>%</p>
                 </div>
 
-                <p class="Loan Tonur">Interest Rate</p>
+                <p class="Loan Tonur">Total Year</p>
+                <div>
+                  <input 
+                  type="number"
+                  min="1"
+                  max="30"
+                  value="1"
+                  id="TotalYearInput"
+                  onchange="getTotalYear(value)"
+                  />
+                </div>
                 <div class="slidecontainer3">
                   <input
                     type="range"
@@ -74,7 +104,9 @@
               
             </div>
             <div class="col-sm-6">
-              <canvas id="doughnutChart"> </canvas>
+                    <canvas id="doughnutChart"> </canvas>
+              
+            
           </div>
           </div>
           
@@ -94,16 +126,16 @@
                 <div class="col-sm-6">
                   <p class="Monthly Emi">Monthly Emi</p>
                   <p class="Principal Amount">Principal Amount</p>
-                  <p class="Total Months">Total Year</p>
+                  <p class="Total Months">Total Months</p>
                   <p class="Total Interest">Total Interest</p>
                   <p class="Total Amount">Total Amount</p>
                 </div>
                 <div class="col-sm-6 text-right">
-                  <p class="Left">Monthly Emi</p>
+                  <p class="Left" id='monthlyPay'>0</p>
                   <p class="Left1" id="principalAmount">Rs. 10,000</p>
                   <p class="Left2" id="totalMonth">1Year</p>
                   <p class="Left3" id="totalInterest">1%</p>
-                  <p class="Left4">Total Amount</p>
+                  <p class="Left4" id="totalAmount">Total Amount</p>
                 </div>
                 <div class="col-sm-12 text-center">
                   <button
@@ -123,57 +155,95 @@
       </div>
     </div>
     <script>
+
+      var pa = document.getElementById("principalAmount");
+      var output1 = document.getElementById("loan");
+      var slider1 = document.getElementById("loanRange");
+      var loanRangeInput = document.getElementById('loanRangeInput')
+      var ti = document.getElementById("totalInterest");
+      var slider2 = document.getElementById("rateRange");
+      var output2 = document.getElementById("rate");
+      var tm = document.getElementById("totalMonth");
+      var slider3 = document.getElementById("yearrange");
+      var output3 = document.getElementById("year");
+      var totalAmount = document.getElementById('totalAmount');
+      var monthlyPay = document.getElementById('monthlyPay');
+
+      
+
+      calculateTotal()
+
+      function calculateTotal(){
+       
+        var months = parseInt(slider3.value) * 12
+        var int = parseInt(ti.innerHTML) / 100 / 12 
+        var principalAmnt= parseInt(loanRangeInput.value)
+        var x = Math.pow(1 + int,months );
+        var monthly = (principalAmnt*x*int)/(x-1); 
+        monthlyPay.innerHTML = monthly.toFixed(2)
+        totalAmount.innerHTML = (monthly *months).toFixed(2)
+        tm.innerHTML = months
+        ti.innerHTML =  (parseInt(totalAmount.innerHTML) - principalAmnt ) * months
+
+        debugger
+      }
+
+      
+
       function myFunction() {
         document.getElementById("de").innerHTML = "";
       }
-    </script>
-    <script>
-      function myFunction1(val) {
-        var pa = document.getElementById("principalAmount");
+
+      function getLoanRange(val){
+        slider1.value = val
+        output1.innerHTML = val
         pa.innerHTML = val;
-
-        console.log("The input value has changed. The new value is: " + val);
+        
+        calculateTotal()
       }
-      var slider1 = document.getElementById("loanRange");
-      var output1 = document.getElementById("loan");
+      
+      function myFunction1(val) {
+        loanRangeInput.innerHTML = val
+        pa.innerHTML = val;
+        console.log("The input value has changed. The new value is: " + val);
+        calculateTotal()
+      }
+     
       output1.innerHTML = slider1.value;
-
+     
       slider1.oninput = function () {
         output1.innerHTML = this.value;
+        loanRangeInput.value= this.value
+        calculateTotal()
       };
-    </script>
-
-    <script>
+   
       function myFunction2(val) {
-        var ti = document.getElementById("totalInterest");
+       
         ti.innerHTML = val;
+        calculateTotal()
 
         console.log("The input value has changed. The new value is: " + val);
       }
-      var slider2 = document.getElementById("rateRange");
-      var output2 = document.getElementById("rate");
+      
       output2.innerHTML = slider2.value;
 
       slider2.oninput = function () {
         output2.innerHTML = this.value;
       };
-    </script>
-
-    <script>
-      function myFunction3(val) {
-        var tm = document.getElementById("totalMonth");
-        tm.innerHTML = val;
-
-        console.log("The input value has changed. The new value is: " + val);
-      }
-      var slider3 = document.getElementById("yearrange");
-      var output3 = document.getElementById("year");
+    
+      
+      
       output3.innerHTML = slider3.value;
       console.log(slider3.value);
 
       slider3.oninput = function () {
+        calculateTotal()
         output3.innerHTML = this.value;
       };
+
+      
+
+
     </script>
 
     <script>
@@ -196,3 +266,5 @@
     </script>
   </body>
 </html>
+
+|
